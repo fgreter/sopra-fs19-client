@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { BaseContainer, FormContainer, Form,
   InputField, Label, ButtonContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
@@ -49,7 +48,8 @@ class Login extends React.Component {
       .then(async response => {
         if (!response.ok) {
           const errorMsg = await response.json();
-          const errorURL = "/error?code=" + response.status + "&message=" + errorMsg.message;
+          console.log(errorMsg);
+          const errorURL = "/error?code=" + response.status + "&error=" + errorMsg.error +"&message=" + errorMsg.message;
           this.props.history.push(errorURL);
           return null;
         } else {

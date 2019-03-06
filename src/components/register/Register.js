@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { BaseContainer, FormContainer, Form,
     InputField, Label, ButtonContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
@@ -38,12 +37,6 @@ class Register extends React.Component {
      * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
      */
     register() {
-        let a = JSON.stringify( {
-            username: this.state.username,
-            name: this.state.name,
-            password: this.state.password
-        })
-        alert(a);
         fetch(`${getDomain()}/users`, {
             method: "POST",
             headers: {
@@ -55,14 +48,25 @@ class Register extends React.Component {
                 password: this.state.password
             })
         })
-            .then(response => response.json())
-            //TODO add error checking
+            .then(async response => {
+                if (!response.ok) {
+                    const errorMsg = await response.json();
+                    console.log(errorMsg);
+                    const errorURL = "/error?code=" + response.status + "&error=" + errorMsg.error +"&message=" + errorMsg.message;
+                    this.props.history.push(errorURL);
+                    return null;
+                } else {
+                    return response.json();
+                }
+            })
             .then(returnedUser => {
-                const user = new User(returnedUser);
-                // store the token into the local storage
-                localStorage.setItem("token", user.token);
-                // user login successfully worked --> navigate to the route /game in the GameRouter
-                this.props.history.push(`/login`);
+                if(returnedUser !== null) {
+                    const user = new User(returnedUser);
+                    // store the token into the local storage
+                    localStorage.setItem("token", user.token);
+                    // user login successfully worked --> navigate to the route /game in the GameRouter
+                    this.props.history.push(`/game`);
+                }
             })
             .catch(err => {
                 if (err.message.match(/Failed to fetch/)) {
@@ -137,7 +141,7 @@ class Register extends React.Component {
                                     this.register();
                                 }}
                             >
-                                Login
+                                Register
                             </Button>
                         </ButtonContainer>
                     </Form>

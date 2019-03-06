@@ -1,7 +1,8 @@
 import React from "react";
-import { BaseContainer, FormContainer, Form, Label, WhiteText } from "../../helpers/layout";
+import {BaseContainer, FormContainer, Form, Label, WhiteText, ButtonContainer} from "../../helpers/layout";
 import { withRouter } from "react-router-dom";
 import queryString from "query-string";
+import {Button} from "../../views/design/Button";
 
 
 class ErrorPage extends React.Component {
@@ -9,6 +10,7 @@ class ErrorPage extends React.Component {
         super(props);
         this.state = {
             code: "",
+            error: "",
             message: ""
         };
     }
@@ -16,7 +18,12 @@ class ErrorPage extends React.Component {
     componentDidMount() {
         const values = queryString.parse(this.props.location.search);
         this.setState({"code":values.code});
+        this.setState({"error":values.error});
         this.setState({"message": values.message});
+    }
+
+    back() {
+        this.props.history.goBack();
     }
 
     render () {
@@ -25,9 +32,16 @@ class ErrorPage extends React.Component {
                 <FormContainer>
                     <Form>
                         <Label>Error Code:</Label>
-                        <WhiteText>{this.state.code}</WhiteText>
+                        <WhiteText>{this.state.code}: {this.state.error}</WhiteText>
                         <Label>Error Message:</Label>
                         <WhiteText>{this.state.message}</WhiteText>
+                        <ButtonContainer>
+                        <Button
+                            onClick={() => {
+                                this.back();
+                            }}
+                        >Back</Button>
+                        </ButtonContainer>
                     </Form>
                 </FormContainer>
             </BaseContainer>
