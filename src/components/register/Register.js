@@ -1,60 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { BaseContainer } from "../../helpers/layout";
+import { BaseContainer, FormContainer, Form,
+    InputField, Label, ButtonContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
-const FormContainer = styled.div`
-  margin-top: 2em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 300px;
-  justify-content: center;
-`;
-
-const Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 60%;
-  height: 375px;
-  font-size: 16px;
-  font-weight: 300;
-  padding-left: 37px;
-  padding-right: 37px;
-  border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
-  transition: opacity 0.5s ease, transform 0.5s ease;
-`;
-
-const InputField = styled.input`
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.2);
-  }
-  height: 35px;
-  padding-left: 15px;
-  margin-left: -4px;
-  border: none;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-`;
-
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-`;
 
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
@@ -77,7 +29,8 @@ class Register extends React.Component {
         this.state = {
             name: null,
             username: null,
-            password: null
+            password: null,
+            confirm: null
         };
     }
     /**
@@ -85,6 +38,12 @@ class Register extends React.Component {
      * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
      */
     register() {
+        let a = JSON.stringify( {
+            username: this.state.username,
+            name: this.state.name,
+            password: this.state.password
+        })
+        alert(a);
         fetch(`${getDomain()}/users`, {
             method: "POST",
             headers: {
@@ -97,6 +56,7 @@ class Register extends React.Component {
             })
         })
             .then(response => response.json())
+            //TODO add error checking
             .then(returnedUser => {
                 const user = new User(returnedUser);
                 // store the token into the local storage
@@ -140,28 +100,38 @@ class Register extends React.Component {
                     <Form>
                         <Label>Name</Label>
                         <InputField
-                            placeholder="Enter here.."
+                            placeholder="Enter name here.."
                             onChange={e => {
                                 this.handleInputChange("name", e.target.value);
                             }}
                         />
                         <Label>Username</Label>
                         <InputField
-                            placeholder="Enter here.."
+                            placeholder="Enter username here.."
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
                             }}
                         />
                         <Label>Password</Label>
                         <InputField
-                            placeholder="Enter here.."
+                            placeholder="Enter password here.."
+                            type="password"
                             onChange={e => {
                                 this.handleInputChange("password", e.target.value);
                             }}
                         />
+                        <Label>Confirm password</Label>
+                        <InputField
+                            placeholder="Repeat password here.."
+                            type="password"
+                            onChange={e => {
+                                this.handleInputChange("confirm", e.target.value);
+                            }}
+                        />
                         <ButtonContainer>
                             <Button
-                                disabled={!this.state.username || !this.state.name || !this.state.password}
+                                disabled={!this.state.username || !this.state.name || !this.state.password
+                                ||(this.state.password !== this.state.confirm)}
                                 width="50%"
                                 onClick={() => {
                                     this.register();
