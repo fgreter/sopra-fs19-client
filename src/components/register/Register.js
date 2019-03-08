@@ -28,6 +28,7 @@ class Register extends React.Component {
         this.state = {
             name: null,
             username: null,
+            birthday: null,
             password: null,
             confirm: null
         };
@@ -45,6 +46,7 @@ class Register extends React.Component {
             body: JSON.stringify({
                 username: this.state.username,
                 name: this.state.name,
+                birthday: this.state.birthday + "T00:00:00",
                 password: this.state.password
             })
         })
@@ -114,6 +116,13 @@ class Register extends React.Component {
                             placeholder="Enter username here.."
                             onChange={e => {
                                 this.handleInputChange("username", e.target.value);
+                            }}
+                        />
+                        <Label>Birthday (YYYY-MM-DD)</Label>
+                        <InputField
+                            placeholder="YYYY-MM-DD"
+                            onChange={e => {
+                                this.handleInputChange("birthday", e.target.value);
                             }}
                         />
                         <Label>Password</Label>
