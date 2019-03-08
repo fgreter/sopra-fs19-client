@@ -95,40 +95,48 @@ class Login extends React.Component {
   componentDidMount() {}
 
   render() {
-    return (
-      <BaseContainer>
-        <FormContainer>
-          <Form>
-            <Label>Username</Label>
-            <InputField
+    return <BaseContainer>
+      <FormContainer>
+        <Form>
+          <Label>Username</Label>
+          <InputField
               placeholder="Enter username here.."
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
-            />
-            <Label>Password</Label>
-            <InputField
+          />
+          <Label>Password</Label>
+          <InputField
               placeholder="Enter password here.."
               type="password"
               onChange={e => {
                 this.handleInputChange("password", e.target.value);
               }}
-            />
-            <ButtonContainer>
-              <Button
+          />
+          <ButtonContainer>
+            <Button
                 disabled={!this.state.username || !this.state.password}
                 width="50%"
                 onClick={() => {
                   this.login();
                 }}
-              >
-                Login
-              </Button>
-            </ButtonContainer>
-          </Form>
-        </FormContainer>
-      </BaseContainer>
-    );
+            >
+              Login
+            </Button>
+            <Button
+                width="50%"
+                onClick={() => {
+                  this.props.history.push("/register")
+                }}
+
+            >
+              Register new user
+            </Button>
+
+          </ButtonContainer>
+        </Form>
+      </FormContainer>
+    </BaseContainer>;
   }
 }
 

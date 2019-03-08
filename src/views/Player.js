@@ -37,10 +37,10 @@ const Id = styled.div`
 const Player = ({ user }) => {
   return (
     <Container>
-      <Name>
-          <a href={"/users/" + user.id}>{user.name}</a>
-      </Name>{" "}
-      <UserName>{user.username}</UserName>
+      <Name>{user.name}</Name>{" "}
+      <UserName>
+        <a href={"/users?id=" + user.id}>{user.username}</a>
+      </UserName>
       <Id>Id: {user.id}</Id>
     </Container>
   );

@@ -10,6 +10,7 @@ export const BaseContainer = styled.div`
   padding-left: 15px;
   margin-right: auto;
   padding-right: 15px;
+  height: auto;
   max-width: ${DESKTOP_WIDTH}px;
 `;
 
@@ -19,6 +20,7 @@ export const FormContainer = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 300px;
+  height: auto;
   justify-content: center;
 `;
 
@@ -27,11 +29,15 @@ export const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 60%;
-  height: 375px;
+  min-height: 375px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   border-radius: 5px;
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;

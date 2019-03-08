@@ -152,6 +152,15 @@ class Register extends React.Component {
                             >
                                 Register
                             </Button>
+                            <Button
+                                width="50%"
+                                onClick={() => {
+                                    this.props.history.push("/login")
+                                }}
+
+                            >
+                                Login existing user
+                            </Button>
                         </ButtonContainer>
                     </Form>
                 </FormContainer>
