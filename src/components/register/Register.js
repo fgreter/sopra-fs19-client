@@ -2,7 +2,6 @@ import React from "react";
 import { BaseContainer, FormContainer, Form,
     InputField, Label, ButtonContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
-import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
@@ -46,7 +45,7 @@ class Register extends React.Component {
             body: JSON.stringify({
                 username: this.state.username,
                 name: this.state.name,
-                birthday: this.state.birthday + "T00:00:00",
+                birthday: this.state.birthday,
                 password: this.state.password
             })
         })
@@ -58,16 +57,7 @@ class Register extends React.Component {
                     this.props.history.push(errorURL);
                     return null;
                 } else {
-                    return response.json();
-                }
-            })
-            .then(returnedUser => {
-                if(returnedUser !== null) {
-                    const user = new User(returnedUser);
-                    // store the token into the local storage
-                    localStorage.setItem("token", user.token);
-                    // user login successfully worked --> navigate to the route /game in the GameRouter
-                    this.props.history.push(`/game`);
+                    this.props.history.push("/login");
                 }
             })
             .catch(err => {

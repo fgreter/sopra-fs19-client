@@ -17,8 +17,8 @@ class ErrorPage extends React.Component {
 
     componentDidMount() {
         const values = queryString.parse(this.props.location.search);
-        this.setState({"code":values.code});
-        this.setState({"error":values.error});
+        this.setState({"code": values.code});
+        this.setState({"error": values.error});
         this.setState({"message": values.message});
     }
 
