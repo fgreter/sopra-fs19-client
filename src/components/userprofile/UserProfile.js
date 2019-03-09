@@ -56,7 +56,7 @@ class UserProfile extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.loadData();
   }
 
