@@ -74,7 +74,7 @@ class UserProfile extends React.Component {
     });
     console.log(changes);
     fetch(`${getDomain()}/users/${this.state.id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
