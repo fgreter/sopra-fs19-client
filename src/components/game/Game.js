@@ -45,7 +45,26 @@ class Game extends React.Component {
         "token": localStorage.getItem("token")
       }
     })
-        .then(response => response.json())
+        .then(async response => {
+          if (!response.ok) {
+            const errorMsg = await response.json();
+            console.log(errorMsg);
+            if (response.status === 401) {
+              localStorage.removeItem("token");
+            }
+            const errorURL =
+              "/error?code=" +
+              response.status +
+              "&error=" +
+              errorMsg.error +
+              "&message=" +
+              errorMsg.message;
+            this.props.history.push(errorURL);
+            return null;
+          } else {
+            return response.json();
+          }
+        })
         .then(async users => {
           // delays continuous execution of an async operation for 0.8 seconds.
           // This is just a fake async call, so that the spinner can be displayed

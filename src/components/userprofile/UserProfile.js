@@ -132,9 +132,27 @@ class UserProfile extends React.Component {
         token: localStorage.getItem("token")
       })
     })
-      .then(() => {
-        localStorage.removeItem("token");
-        this.props.history.push("/register");
+      .then(async response => {
+        if (!response.ok) {
+          const errorMsg = await response.json();
+          console.log(errorMsg);
+          if (response.status === 401) {
+            localStorage.removeItem("token");
+            this.props.history.push("/login");
+          }
+          const errorURL =
+            "/error?code=" +
+            response.status +
+            "&error=" +
+            errorMsg.error +
+            "&message=" +
+            errorMsg.message;
+          this.props.history.push(errorURL);
+          return null;
+        } else {
+          localStorage.removeItem("token");
+          this.props.history.push("/register");
+        }
       })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
@@ -162,6 +180,9 @@ class UserProfile extends React.Component {
         if (!response.ok) {
           const errorMsg = await response.json();
           console.log(errorMsg);
+          if (response.status === 401) {
+            localStorage.removeItem("token");
+          }
           const errorURL =
             "/error?code=" +
             response.status +
