@@ -25,8 +25,8 @@ const PlayerContainer = styled.li`
 `;
 
 class Game extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       users: null
     };
@@ -62,7 +62,6 @@ class Game extends React.Component {
   render() {
     return (
       <Container>
-        <h2>Happy Coding! </h2>
         <p>Get all users from secure end point:</p>
         {!this.state.users ? (
           <Spinner />

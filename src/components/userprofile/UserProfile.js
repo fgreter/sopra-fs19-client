@@ -1,5 +1,9 @@
 import React from "react";
-import { BaseContainer, InputField } from "../../helpers/layout";
+import {
+  BaseContainer,
+  ButtonContainer,
+  InputField
+} from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import { withRouter } from "react-router-dom";
 import queryString from "query-string";
@@ -49,6 +53,7 @@ class UserProfile extends React.Component {
     this.state = {
       user: null,
       id: null,
+      token: null,
       newUsername: null,
       newBirthday: null,
       showChangeUsername: false,
@@ -56,7 +61,7 @@ class UserProfile extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.loadData();
   }
 
@@ -66,7 +71,8 @@ class UserProfile extends React.Component {
     this.setState({ [key]: value });
   }
 
-  changeInfo() {
+  async changeInfo() {
+    await this.setState({ user: null });
     const changes = JSON.stringify({
       id: this.state.id,
       username: this.state.newUsername,
@@ -110,12 +116,39 @@ class UserProfile extends React.Component {
       newUsername: "default",
       newBirthday: "1900-1-1"
     });
-    this.setState({user: null});
-    this.loadData();
+    await this.loadData();
+  }
+
+  deleteUser() {
+    console.log(localStorage.getItem("token"));
+    console.log(this.state.user.token);
+    fetch(`${getDomain()}/users/${this.state.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token")
+      })
+    })
+      .then(() => {
+        localStorage.removeItem("token");
+        this.props.history.push("/register");
+      })
+      .catch(err => {
+        if (err.message.match(/Failed to fetch/)) {
+          alert("The server cannot be reached. Did you start it?");
+        } else {
+          alert(
+            `Something went wrong while trying to update user: ${err.message}`
+          );
+        }
+      });
   }
 
   async loadData() {
-    const values = queryString.parse(this.props.location.search);
+    // this.props.location === "/users?id=5"
+    const values = queryString.parse(this.props.location.search); // this.props.location.search === "id=5"
     await this.setState({ id: values.id });
     fetch(`${getDomain()}/users/${this.state.id}`, {
       method: "GET",
@@ -149,6 +182,7 @@ class UserProfile extends React.Component {
         await this.setState({ user: user });
         await this.setState({ newUsername: user.username });
         await this.setState({ newBirthday: user.birthday });
+        await this.setState( { token: user.token});
       })
       .catch(err => {
         console.log(err);
@@ -159,38 +193,39 @@ class UserProfile extends React.Component {
   render() {
     return (
       <Container>
-        {!this.state.user ? (
-          <Spinner />
-        ) : (
-          <div>
+        <div>
+          {!this.state.user ? (
+            <Spinner />
+          ) : (
             <InvisTable>
               <tbody>
                 <tr>
                   <td>Username:</td>
                   <td>{this.state.user.username}</td>
                   <td>
-                    {localStorage.getItem("token") === this.state.user.token &&
-                    !this.state.showChangeUsername ? (
-                      <Button
-                        onClick={() => {
-                          this.setState({ showChangeUsername: true });
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    ) : (
-                      <div>
-                        <InputField
-                          placeholder="New username..."
-                          onChange={e => {
-                            this.handleInputChange(
-                              "newUsername",
-                              e.target.value
-                            );
+                    {localStorage.getItem("token") === this.state.token ? (
+                      !this.state.showChangeUsername ? (
+                        <Button
+                          onClick={() => {
+                            this.setState({ showChangeUsername: true });
                           }}
-                        />
-                      </div>
-                    )}
+                        >
+                          Edit
+                        </Button>
+                      ) : (
+                        <div>
+                          <InputField
+                            placeholder="New username..."
+                            onChange={e => {
+                              this.handleInputChange(
+                                "newUsername",
+                                e.target.value
+                              );
+                            }}
+                          />
+                        </div>
+                      )
+                    ) : null}
                   </td>
                 </tr>
                 <tr>
@@ -205,47 +240,74 @@ class UserProfile extends React.Component {
                   <td>Birthday:</td>
                   <td>{this.state.user.birthday}</td>
                   <td>
-                    {localStorage.getItem("token") === this.state.user.token &&
-                    !this.state.showChangeBirthday ? (
-                      <Button
-                        onClick={() => {
-                          this.setState({ showChangeBirthday: true });
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    ) : (
-                      <div>
-                        <InputField
-                          placeholder="YYYY-MM-DD"
-                          onChange={e => {
-                            this.handleInputChange(
-                              "newBirthday",
-                              e.target.value
-                            );
+                    {localStorage.getItem("token") === this.state.token ? (
+                      !this.state.showChangeBirthday ? (
+                        <Button
+                          onClick={() => {
+                            this.setState({ showChangeBirthday: true });
                           }}
-                        />
-                      </div>
-                    )}
+                        >
+                          Edit
+                        </Button>
+                      ) : (
+                        <div>
+                          <InputField
+                            placeholder="New birthday..."
+                            onChange={e => {
+                              this.handleInputChange(
+                                "newBirthday",
+                                e.target.value
+                              );
+                            }}
+                          />
+                        </div>
+                      )
+                    ) : null}
                   </td>
                 </tr>
               </tbody>
             </InvisTable>
-            {this.state.showChangeBirthday || this.state.showChangeUsername ? (
+          )}
+          {this.state.showChangeBirthday || this.state.showChangeUsername ? (
+            <Button
+              onClick={() => {
+                this.changeInfo();
+                this.setState({
+                  showChangeBirthday: false,
+                  showChangeUsername: false
+                });
+              }}
+            >
+              Submit Changes
+            </Button>
+          ) : null}
+          {localStorage.getItem("token") === this.state.token ? (
+            <ButtonContainer>
               <Button
                 onClick={() => {
-                  this.changeInfo();
-                  this.setState({
-                    showChangeBirthday: false,
-                    showChangeUsername: false
-                  });
+                  if (
+                    window.confirm(
+                      "Do you really want to delete this user? This action can not be undone."
+                    )
+                  ) {
+                    this.deleteUser();
+                  }
                 }}
               >
-                Submit Changes
+                Delete User
               </Button>
-            ) : null}
-          </div>
-        )}
+            </ButtonContainer>
+          ) : null}
+          <ButtonContainer>
+            <Button
+              onClick={() => {
+                this.props.history.push("/game/dashboard");
+              }}
+            >
+              Back to dashboard
+            </Button>
+          </ButtonContainer>
+        </div>
       </Container>
     );
   }

@@ -61,6 +61,13 @@ class Login extends React.Component {
           const user = new User(returnedUser);
           // store the token into the local storage
           localStorage.setItem("token", user.token);
+          /* Storing token with last seen date as time info to verify age of login and delete as necessary ->
+          TODO: implement across all components ?? probably not, it's just extra work
+          localStorage.setItem("token", JSON.stringify({
+            time: user.lastSeenDate,
+            token: user.token
+          }));
+          */
           // user login successfully worked --> navigate to the route /game in the GameRouter
           this.props.history.push(`/game`);
         }
