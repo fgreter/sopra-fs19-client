@@ -7,6 +7,7 @@ class User {
     this.name = null;
     this.username = null;
     this.registrationDate = null;
+    this.lastSeenDate = null;
     this.birthday = null;
     this.token = null;
     this.status = null;

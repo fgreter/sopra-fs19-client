@@ -9,6 +9,6 @@ export const ProfileGuard = props => {
     if (localStorage.getItem("token")) {
         return props.children;
     }
-    // if user is already logged in, redirects to the main /app
+    // if user is not logged in, redirect to /login
     return <Redirect to={"/login"} />;
 };
