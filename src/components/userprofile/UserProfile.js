@@ -70,7 +70,8 @@ class UserProfile extends React.Component {
     const changes = JSON.stringify({
       id: this.state.id,
       username: this.state.newUsername,
-      birthday: this.state.newBirthday
+      birthday: this.state.newBirthday,
+      token: this.user.token
     });
     console.log(changes);
     fetch(`${getDomain()}/users/${this.state.id}`, {
@@ -120,7 +121,8 @@ class UserProfile extends React.Component {
     fetch(`${getDomain()}/users/${this.state.id}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "token": this.user.token
       }
     })
       .then(async response => {
