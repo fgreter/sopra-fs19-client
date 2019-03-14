@@ -1,6 +1,9 @@
 {
   "name": "sopra-fs19-client-template",
   "version": "0.1.0",
+  "engines": {
+    "npm": "6.9"
+  },
   "private": true,
   "dependencies": {
     "react": "^16.6.3",
