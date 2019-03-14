@@ -6,9 +6,9 @@ import {
 } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import { withRouter } from "react-router-dom";
-import queryString from "query-string";
 import { Spinner } from "../../views/design/Spinner";
 import styled from "styled-components";
+import * as queryString from "query-string";
 
 const Container = styled(BaseContainer)`
   display: flex;

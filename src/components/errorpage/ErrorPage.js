@@ -1,8 +1,8 @@
 import React from "react";
 import {BaseContainer, FormContainer, Form, Label, WhiteText, ButtonContainer} from "../../helpers/layout";
 import { withRouter } from "react-router-dom";
-import queryString from "query-string";
 import {Button} from "../../views/design/Button";
+import * as queryString from "query-string";
 
 
 class ErrorPage extends React.Component {
