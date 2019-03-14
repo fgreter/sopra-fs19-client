@@ -1,17 +1,13 @@
 {
   "name": "sopra-fs19-client-template",
   "version": "0.1.0",
-  "engines": {
-    "npm": "6.7.x",
-    "node": "11.10.1"
-  },
   "private": true,
   "dependencies": {
-    "query-string": "^6.3.0",
+    "query-string": "^6.4.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.8",
+    "react-scripts": "2.1.1",
     "styled-components": "^4.1.2"
   },
   "scripts": {
