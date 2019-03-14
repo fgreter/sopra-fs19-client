@@ -58,8 +58,7 @@ class Register extends React.Component {
                     console.log(response.headers.has("reason"));
                     const errorMsg = await response.text();
                     console.log(errorMsg);
-                    const errorURL = "/error?code=" + response.status +
-                      "&error=" + response.headers.get("Content-Type") +"&message=" + errorMsg;
+                    const errorURL = "/error?code=" + response.status +"&message=" + errorMsg;
                     this.props.history.push(errorURL);
                     return null;
                 } else {

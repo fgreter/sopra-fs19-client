@@ -18,7 +18,6 @@ class ErrorPage extends React.Component {
     componentDidMount() {
         const values = queryString.parse(this.props.location.search);
         this.setState({"code": values.code});
-        this.setState({"error": values.error});
         this.setState({"message": values.message});
     }
 
@@ -32,7 +31,7 @@ class ErrorPage extends React.Component {
                 <FormContainer>
                     <Form>
                         <Label>Error Code:</Label>
-                        <WhiteText>{this.state.code}: {this.state.error}</WhiteText>
+                        <WhiteText>{this.state.code}</WhiteText>
                         <Label>Error Message:</Label>
                         <WhiteText>{this.state.message}</WhiteText>
                         <ButtonContainer>

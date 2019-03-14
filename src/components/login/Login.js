@@ -47,9 +47,10 @@ class Login extends React.Component {
     })
       .then(async response => {
         if (!response.ok) {
-          const errorMsg = await response.json();
+          console.log(response);
+          const errorMsg = await response.text();
           console.log(errorMsg);
-          const errorURL = "/error?code=" + response.status + "&error=" + errorMsg.error +"&message=" + errorMsg.message;
+          const errorURL = "/error?code=" + response.status +"&message=" + errorMsg;
           this.props.history.push(errorURL);
           return null;
         } else {

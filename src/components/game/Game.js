@@ -52,13 +52,11 @@ class Game extends React.Component {
             if (response.status === 401) {
               localStorage.removeItem("token");
             }
-            const errorURL =
-              "/error?code=" +
-              response.status +
-              "&error=" +
-              errorMsg.error +
-              "&message=" +
-              errorMsg.message;
+            console.log(response);
+            response.headers.forEach(header => {
+              console.log(header);
+            });
+            const errorURL = "/error?code=" + response.status +"&message=" + errorMsg;
             this.props.history.push(errorURL);
             return null;
           } else {

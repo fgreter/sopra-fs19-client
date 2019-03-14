@@ -77,27 +77,23 @@ class UserProfile extends React.Component {
       id: this.state.id,
       username: this.state.newUsername,
       birthday: this.state.newBirthday,
-      token: this.user.token
+      token: localStorage.getItem("token")
     });
     console.log(changes);
     fetch(`${getDomain()}/users/${this.state.id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json;charset=UTF-8"
       },
       body: changes
     })
       .then(async response => {
         if (!response.ok) {
-          const errorMsg = await response.json();
+          console.log(response);
+          const errorMsg = await response.text();
           console.log(errorMsg);
           const errorURL =
-            "/error?code=" +
-            response.status +
-            "&error=" +
-            errorMsg.error +
-            "&message=" +
-            errorMsg.message;
+            "/error?code=" + response.status + "&message=" + errorMsg;
           this.props.history.push(errorURL);
           return null;
         } else {
@@ -126,27 +122,20 @@ class UserProfile extends React.Component {
     fetch(`${getDomain()}/users/${this.state.id}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        token: localStorage.getItem("token")
-      })
+        "Content-Type": "application/json",
+        token: this.state.user.token
+      }
     })
       .then(async response => {
         if (!response.ok) {
-          const errorMsg = await response.json();
+          const errorMsg = await response.text();
           console.log(errorMsg);
           if (response.status === 401) {
             localStorage.removeItem("token");
             this.props.history.push("/login");
           }
           const errorURL =
-            "/error?code=" +
-            response.status +
-            "&error=" +
-            errorMsg.error +
-            "&message=" +
-            errorMsg.message;
+            "/error?code=" + response.status + "&message=" + errorMsg;
           this.props.history.push(errorURL);
           return null;
         } else {
@@ -173,23 +162,18 @@ class UserProfile extends React.Component {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "token": this.user.token
+        token: localStorage.getItem("token")
       }
     })
       .then(async response => {
         if (!response.ok) {
-          const errorMsg = await response.json();
+          const errorMsg = await response.text();
           console.log(errorMsg);
           if (response.status === 401) {
             localStorage.removeItem("token");
           }
           const errorURL =
-            "/error?code=" +
-            response.status +
-            "&error=" +
-            errorMsg.error +
-            "&message=" +
-            errorMsg.message;
+            "/error?code=" + response.status + "&message=" + errorMsg;
           this.props.history.push(errorURL);
           return null;
         } else {
@@ -205,7 +189,7 @@ class UserProfile extends React.Component {
         await this.setState({ user: user });
         await this.setState({ newUsername: user.username });
         await this.setState({ newBirthday: user.birthday });
-        await this.setState( { token: user.token});
+        await this.setState({ token: user.token });
       })
       .catch(err => {
         console.log(err);
