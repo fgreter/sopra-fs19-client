@@ -51,9 +51,15 @@ class Register extends React.Component {
         })
             .then(async response => {
                 if (!response.ok) {
-                    const errorMsg = await response.json();
+                    console.log(response);
+                    response.headers.forEach(header => {
+                        console.log(header);
+                    });
+                    console.log(response.headers.has("reason"));
+                    const errorMsg = await response.text();
                     console.log(errorMsg);
-                    const errorURL = "/error?code=" + response.status + "&error=" + errorMsg.error +"&message=" + errorMsg.message;
+                    const errorURL = "/error?code=" + response.status +
+                      "&error=" + response.headers.get("Content-Type") +"&message=" + errorMsg;
                     this.props.history.push(errorURL);
                     return null;
                 } else {

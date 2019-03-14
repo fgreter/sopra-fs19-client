@@ -47,7 +47,7 @@ class Game extends React.Component {
     })
         .then(async response => {
           if (!response.ok) {
-            const errorMsg = await response.json();
+            const errorMsg = response.body;
             console.log(errorMsg);
             if (response.status === 401) {
               localStorage.removeItem("token");
