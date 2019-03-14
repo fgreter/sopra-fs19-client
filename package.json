@@ -2,7 +2,8 @@
   "name": "sopra-fs19-client-template",
   "version": "0.1.0",
   "engines": {
-    "npm": "6.7"
+    "npm": "6.7",
+    "node": "11.11.x"
   },
   "private": true,
   "dependencies": {
